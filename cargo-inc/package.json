@@ -5,7 +5,11 @@
   "main": "cargo-inc.yaml",
   "devDependencies": {
     "@shipengine/integration-platform-sdk": "0.0.21",
+    "cross-env": "^7.0.2",
     "dotenv-flow": "^3.1.0"
+  },
+  "scripts": {
+    "debug": "cross-env NODE_OPTIONS=--inspect-brk shipengine apps:test"
   },
   "dependencies": {
     "axios": "^0.19.2"

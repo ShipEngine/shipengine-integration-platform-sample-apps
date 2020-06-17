@@ -21,17 +21,19 @@ const data = [
 function voidLabels(request) {
   return {
     canceledShipments: request.cancelations.map((cancelation) => {
-      const { cancelationID } = cancelation;
+      const { cancellationID } = cancelation;
       const { status, code, description, notes } = data[Math.floor(Math.random() * data.length)];
 
       return {
-        id: cancelationID,
+        id: cancellationID,
         cancelationStatus: status,
         cancelationCode: code,
         cancelationDescription: description,
         cancelationNotes: notes,
-        cancelationConfirmation: Buffer.from(new Date().toISOString()).toString("base64"),
-      }
+        cancelationConfirmation: Buffer.from(new Date().toISOString()).toString(
+          "base64"
+        ),
+      };
     })
   }
 }
