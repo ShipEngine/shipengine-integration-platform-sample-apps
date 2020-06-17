@@ -2,19 +2,18 @@
 
 const apiClient = require("./mock-api/client");
 
-async function cancelShipments(transaction, shipmentCancelations) {
+async function cancelShipments(transaction, shipmentCancellations) {
   // STEP 1: Validation
 
   // STEP 2: Create the data that the carrier's API expects
-
   let data = {
     operation: "void_labels",
     session_id: transaction.session.id,
-    cancelations: shipmentCancelations.map((cancelation) => {
-      const { cancellationID, trackingNumber } = cancelation;
+    cancellations: shipmentCancellations.map((cancellation) => {
+      const { cancellationID, trackingNumber } = cancellation;
       return {
         cancellationID: cancellationID,
-        internalReferenceID: cancelation.identifiers.internalReferenceID,
+        internalReferenceID: cancellation.identifiers.internalReferenceID,
         trackingNumber: trackingNumber,
       };
     }),
@@ -24,9 +23,7 @@ async function cancelShipments(transaction, shipmentCancelations) {
   const response = await apiClient.request({ data });
 
   // STEP 4: Create the output data that ShipEngine expects
-  const foo = await formatCancellationResponse(response.data);
-
-  return foo;
+  return await formatCancellationResponse(response.data);
 }
 
 /**
@@ -43,15 +40,14 @@ async function formatCancellationResponse(response) {
         default:
           throw new Error("status unkown");
       }
-    })(c.status);
+    })(c.cancellationStatus);
 
     return {
       cancellationID: c.id,
-      status: c.cancelationStatus,
-      confirmation: c.cancelationConfirmation,
-      code: c.cancelationCode,
-      description: c.cancelationDescription,
-      notes: c.cancelationNotes,
+      status: status,
+      code: c.cancellationCode,
+      description: c.cancellationDescription,
+      notes: c.cancellationNotes,
       metadata: {},
     };
   });

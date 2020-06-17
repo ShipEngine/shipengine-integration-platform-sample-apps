@@ -4,13 +4,13 @@ const data = [
   {
     status: "COMPLETE",
     code: "AC",
-    description: "Cancelation is complete.",
+    description: "Cancellation is complete.",
     notes: ""
   },
   {
     status: "FAILED",
     code: "FA",
-    description: "Cancelation failed.",
+    description: "Cancellation failed.",
     notes: "Please call ###-###-### to cancel."
   }
 ]
@@ -20,17 +20,17 @@ const data = [
  */
 function voidLabels(request) {
   return {
-    canceledShipments: request.cancelations.map((cancelation) => {
-      const { cancellationID } = cancelation;
+    canceledShipments: request.cancellations.map((cancellation) => {
+      const { cancellationID } = cancellation;
       const { status, code, description, notes } = data[Math.floor(Math.random() * data.length)];
 
       return {
         id: cancellationID,
-        cancelationStatus: status,
-        cancelationCode: code,
-        cancelationDescription: description,
-        cancelationNotes: notes,
-        cancelationConfirmation: Buffer.from(new Date().toISOString()).toString(
+        cancellationStatus: status,
+        cancellationCode: code,
+        cancellationDescription: description,
+        cancellationNotes: notes,
+        cancellationConfirmation: Buffer.from(new Date().toISOString()).toString(
           "base64"
         ),
       };
