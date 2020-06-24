@@ -11,7 +11,7 @@ export interface RetrieveSellerResponse {
     first_name: string;
     last_name: string;
     email: string;
-    phoneNumber: string;
+    phone_number: string;
   };
   store_id: string;
   name: string;
@@ -25,7 +25,7 @@ export interface RetrieveSellerResponse {
       state: string;
       postalCode: string;
       country: string;
-      timeZone: string;
+      time_zone: string;
     },
   }[]
 }
@@ -41,7 +41,7 @@ export function retrieveSeller(request: HttpRequest & RetrieveSellerRequest): Re
       first_name: "John",
       last_name: "Doe",
       email: "john_doe@gmail.com",
-      phoneNumber: "123-456-7890"
+      phone_number: "123-456-7890"
     },
     store_id: Buffer.from(new Date().toISOString()).toString("base64").toUpperCase(),
     name: "Warehouse Inc. LLC",
@@ -56,7 +56,7 @@ export function retrieveSeller(request: HttpRequest & RetrieveSellerRequest): Re
           state: "Texas",
           postalCode: "78665",
           country: "US",
-          timeZone: "America/Chicago"
+          time_zone: "America/Chicago"
         }
       }
     ]

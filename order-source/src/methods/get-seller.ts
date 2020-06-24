@@ -44,7 +44,7 @@ function formatSeller(data: RetrieveSellerResponse): SellerPOJO {
             stateProvince: warehouse.address.state,
             postalCode: warehouse.address.postalCode,
             country: Country.UnitedStates,
-            timeZone: warehouse.address.timeZone
+            timeZone: warehouse.address.time_zone
           }
         }
       })

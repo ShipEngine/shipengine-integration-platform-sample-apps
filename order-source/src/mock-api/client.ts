@@ -1,6 +1,7 @@
 import axios from "axios";
 import { authenticate, AuthenticateRequest } from "./authenticate";
 import { retrieveSeller, RetrieveSellerRequest } from "./retrieve-seller";
+import { RetrieveSalesOrderRequest, retrieveSalesOrder } from "./retrieve-sales-order";
 
 
 // Read config values from environment variables
@@ -41,12 +42,13 @@ export const apiClient = axios.create({
     switch (request.operation) {
       case "authenticate":
         return authenticate(request as HttpRequest & AuthenticateRequest);
-      
-      case "get_sales_order":
-        return ;
-      
+
       case "retrieve_seller":
         return retrieveSeller(request as HttpRequest & RetrieveSellerRequest);
+
+      case "retrieve_sales_order":
+        return retrieveSalesOrder(request as HttpRequest & RetrieveSalesOrderRequest)
+
     }
   }
 });
