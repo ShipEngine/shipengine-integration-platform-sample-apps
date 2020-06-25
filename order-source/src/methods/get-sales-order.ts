@@ -1,9 +1,8 @@
-import { Transaction, SalesOrderIdentifier, SalesOrderPOJO, SalesOrderStatus, QuantityUnit, Currency, Country, PaymentStatus } from "@shipengine/integration-platform-sdk";
+import { Transaction, SalesOrderIdentifier, SalesOrderPOJO,  QuantityUnit, Currency, Country } from "@shipengine/integration-platform-sdk";
 import { Session } from "./session";
 import { apiClient } from "../mock-api/client";
 import { RetrieveSalesOrderResponse } from "../mock-api/retrieve-sales-order";
-import { time } from "console";
-
+import { mapSalesOrderStatus, mapPaymentStatus, mapPaymentMethod, mapCountryCode } from "../status-and-mappings";
 
 /**
  * Logs in using the username and password entered on the login form
@@ -15,14 +14,14 @@ export default async function getSalesOrder(
 
   // STEP 1: Validation
 
-  // STEP 2: Create the data that the order's API expects
+  // STEP 2: Create the data that the order source's API expects
   const data = {
     operation: "retrieve_sales_order",
     session_id: transaction.session.id,
     sales_order_id: salesOrder.id
   };
 
-  // STEP 3: Call the carrier's API
+  // STEP 3: Call the order source's API
   const response = await apiClient.request<RetrieveSalesOrderResponse>({ data });
 
   // Step 4: Create the output data that ShipEngine expects
@@ -34,16 +33,18 @@ function formatSalesOrder(salesOrder: RetrieveSalesOrderResponse): SalesOrderPOJ
   return {
     id: salesOrder.id,
     createdDateTime: salesOrder.created_at,
-    status: SalesOrderStatus.AwaitingPayment,
+    status: mapSalesOrderStatus(salesOrder.status),
     shipTo: {
       name: salesOrder.address.business_name,
       addressLines: salesOrder.address.lines,
       cityLocality: salesOrder.address.city,
       stateProvince: salesOrder.address.state,
       postalCode: salesOrder.address.postalCode,
-      country: Country.UnitedStates,
+      country: mapCountryCode(salesOrder.address.country),
       timeZone: salesOrder.address.time_zone
     },
+    paymentStatus: mapPaymentStatus(salesOrder.payment.status),
+    paymentMethod: mapPaymentMethod(salesOrder.payment.method),
     seller: {
       id: salesOrder.seller_id,
     },

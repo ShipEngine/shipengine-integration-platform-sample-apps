@@ -2,6 +2,9 @@ import axios from "axios";
 import { authenticate, AuthenticateRequest } from "./authenticate";
 import { retrieveSeller, RetrieveSellerRequest } from "./retrieve-seller";
 import { RetrieveSalesOrderRequest, retrieveSalesOrder } from "./retrieve-sales-order";
+import { retrieveSalesOrdersByDate, RetrieveSalesOrdersByDateRequest } from "./retrieve-sales-orders-by-date";
+import { CancelShipmentRequest, cancelShipment } from "./cancel-shipment";
+import { CreateShipmentRequest, createShipment } from "./create-shipment";
 
 
 // Read config values from environment variables
@@ -47,8 +50,16 @@ export const apiClient = axios.create({
         return retrieveSeller(request as HttpRequest & RetrieveSellerRequest);
 
       case "retrieve_sales_order":
-        return retrieveSalesOrder(request as HttpRequest & RetrieveSalesOrderRequest)
+        return retrieveSalesOrder(request as HttpRequest & RetrieveSalesOrderRequest);
 
+      case "retrieve_sales_orders_by_date":
+        return retrieveSalesOrdersByDate(request as HttpRequest & RetrieveSalesOrdersByDateRequest);
+
+      case "cancel_shipment":
+        return cancelShipment(request as HttpRequest & CancelShipmentRequest);
+
+      case "create_shipment":
+        return createShipment(request as HttpRequest & CreateShipmentRequest);
     }
   }
 });

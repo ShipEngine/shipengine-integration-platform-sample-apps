@@ -1,5 +1,9 @@
-import { Transaction, SalesOrderPOJO, SalesOrderTimeRange, SalesOrderStatus, Country, Currency, QuantityUnit } from "@shipengine/integration-platform-sdk";
+import { Transaction, SalesOrderPOJO, SalesOrderTimeRange, Currency, QuantityUnit } from "@shipengine/integration-platform-sdk";
 import { Session } from "./session";
+import { RetrieveSalesOrderResponse } from "../mock-api/retrieve-sales-order";
+import { apiClient } from "../mock-api/client";
+import { mapSalesOrderStatus, mapPaymentStatus, mapPaymentMethod, mapCountryCode } from "../status-and-mappings";
+import { RetrieveSalesOrdersByDateResponse } from "../mock-api/retrieve-sales-orders-by-date";
 
 
 /**
@@ -10,46 +14,62 @@ export default async function getSalesOrdersByDate(
   range: SalesOrderTimeRange,
 ): Promise<Iterable<SalesOrderPOJO>> {
 
-  return [{
-    id: "12345",
-    createdDateTime: new Date().toISOString(),
-    status: SalesOrderStatus.Completed,
-    shipTo: {
-      name: "John Doe",
-      email: "john.doe@gmail.com",
-      phoneNumber: "123-456-7890",
-      company: "US International",
-      addressLines: ["3800 N Lamar Blvd #220"],
-      cityLocality: "Austin",
-      stateProvince: "TX",
-      postalCode: "78756",
-      country: Country.UnitedStates,
-      timeZone: "America/Chicago",
-    },
-    seller: { id: "12234" },
-    buyer: {
-      id: "1234",
-      name: "A Buyer"
-    },
-    items: [
-      { 
-        id: "1234", 
-        name: "My Item",
-        unitPrice: {
-          value: 123,
-          currency: Currency.UnitedStatesDollar
-        },
-        quantity: {
-          value: 4,
-          unit: QuantityUnit.Each
-        }
-      }
-    ]
-  }]
-  // STEP 1: Validation
-  // STEP 2: Create the data that the carrier's API expects
-  // STEP 3: Call the carrier's API
+
+  // STEP 2: Create the data that the order's API expects
+  const data = {
+    operation: "retrieve_sales_orders_by_date",
+    session_id: transaction.session.id,
+    start_date: new Date().toISOString(),
+    end_date: new Date().toISOString()
+  };
+
+  // STEP 3: Call the order source's API
+  const response = await apiClient.request<RetrieveSalesOrdersByDateResponse>({ data });
+
   // Step 4: Create the output data that ShipEngine expects
-  // which is persisted across all method calls
-  // transaction.session = {};
+  return formatSalesOrders(response.data);
+}
+
+
+function formatSalesOrders(salesOrders: RetrieveSalesOrdersByDateResponse): Iterable<SalesOrderPOJO> {
+
+  return salesOrders.map(salesOrder => {
+    return {
+      id: salesOrder.id,
+      createdDateTime: salesOrder.created_at,
+      status: mapSalesOrderStatus(salesOrder.status),
+      shipTo: {
+        name: salesOrder.address.business_name,
+        addressLines: salesOrder.address.lines,
+        cityLocality: salesOrder.address.city,
+        stateProvince: salesOrder.address.state,
+        postalCode: salesOrder.address.postalCode,
+        country: mapCountryCode(salesOrder.address.country),
+        timeZone: salesOrder.address.time_zone
+      },
+      paymentStatus: mapPaymentStatus(salesOrder.payment.status),
+      paymentMethod: mapPaymentMethod(salesOrder.payment.method),
+      seller: {
+        id: salesOrder.seller_id,
+      },
+      buyer: {
+        id: salesOrder.buyer.id,
+        name: salesOrder.buyer.name
+      },
+      items: salesOrder.shipping_items.map((item) => {
+        return {
+          id: item.id,
+          name: item.name,
+          quantity: {
+            value: item.quantity,
+            unit: QuantityUnit.Each
+          },
+          unitPrice: {
+            value: item.price_per_unit,
+            currency: Currency.UnitedStatesDollar
+          }
+        }
+      })
+    }
+  });
 }

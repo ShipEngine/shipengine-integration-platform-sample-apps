@@ -1,4 +1,5 @@
 import { HttpRequest } from "./client";
+import { orderStatus, paymentStatus, paymentMethod } from "../status-and-mappings";
 
 export interface RetrieveSalesOrderRequest {
   operation: "retrieve_sales_order";
@@ -49,10 +50,10 @@ export function retrieveSalesOrder(request: HttpRequest & RetrieveSalesOrderRequ
   return {
     id: request.sales_order_id,
     created_at: new Date().toISOString(),
-    status: "awaiting_status",
+    status: orderStatus[Math.floor(Math.random() * orderStatus.length)],
     payment: {
-      status: "in_process",
-      method: "credit_card"
+      status: paymentStatus[Math.floor(Math.random() * paymentStatus.length)],
+      method: paymentMethod[Math.floor(Math.random() * paymentMethod.length)]
     },
     address: {
       business_name: "John Doe Business Name",

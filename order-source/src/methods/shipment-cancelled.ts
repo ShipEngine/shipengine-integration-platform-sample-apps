@@ -1,5 +1,6 @@
 import { Transaction, SalesOrderShipment } from "@shipengine/integration-platform-sdk";
 import { Session } from "./session";
+import { apiClient } from "../mock-api/client";
 
 /**
  * Logs in using the username and password entered on the login form
@@ -8,11 +9,13 @@ export default async function shipmentCancelled(
   transaction: Transaction<Session>,
   shipment: SalesOrderShipment,
 ): Promise<void> {
-  // throw new Error("NotImplementedError");
   // STEP 1: Validation
-  // STEP 2: Create the data that the carrier's API expects
-  // STEP 3: Call the carrier's API
-  // Step 4: Create the output data that ShipEngine expects
-  // which is persisted across all method calls
-  // transaction.session = {};
+  // STEP 2: Create the data that the order source's API expects
+  const data = {
+    operation: "cancel_shipment",
+    session_id: transaction.session.id,
+    shipment_id: shipment.trackingNumber
+  };
+  // STEP 3: Call the order source's API
+  await apiClient.request({ data });
 }
