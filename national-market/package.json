@@ -1,11 +1,10 @@
 {
   "name": "@order-source/order-source",
   "version": "1.0.0",
-  "description": "The International Markets App",
-  "main": "src/index.ts",
+  "description": "The National Markets App",
+  "main": "src/index.js",
   "devDependencies": {
     "@shipengine/integration-platform-sdk": "0.0.23",
-    "@types/node": "^14.0.5",
     "dotenv-flow": "^3.1.0"
   },
   "dependencies": {
