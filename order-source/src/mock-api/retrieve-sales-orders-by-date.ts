@@ -9,7 +9,7 @@ export interface RetrieveSalesOrdersByDateRequest {
   end_date: string;
 }
 
-export type RetrieveSalesOrdersByDateResponse = Iterable<RetrieveSalesOrderResponse>;
+export type RetrieveSalesOrdersByDateResponse = Array<RetrieveSalesOrderResponse>;
 
 /**
  * This is a mock implementation of a carrier's API that generates a label for a shipment

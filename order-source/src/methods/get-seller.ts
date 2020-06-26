@@ -11,6 +11,9 @@ export default async function getSeller(
   seller: SellerIdentifier,
 ): Promise<SellerPOJO> {
 
+  // STEP 1: Validation
+  // Add any desired validation here
+
   // STEP 2: Create the data that the order source's API expects
   const data = {
     operation: "retrieve_seller",

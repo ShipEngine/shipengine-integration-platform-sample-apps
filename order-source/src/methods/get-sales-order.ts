@@ -1,4 +1,4 @@
-import { Transaction, SalesOrderIdentifier, SalesOrderPOJO,  QuantityUnit, Currency, Country } from "@shipengine/integration-platform-sdk";
+import { Transaction, SalesOrderIdentifier, SalesOrderPOJO,  QuantityUnit, Currency } from "@shipengine/integration-platform-sdk";
 import { Session } from "./session";
 import { apiClient } from "../mock-api/client";
 import { RetrieveSalesOrderResponse } from "../mock-api/retrieve-sales-order";
@@ -13,7 +13,8 @@ export default async function getSalesOrder(
 ): Promise<SalesOrderPOJO> {
 
   // STEP 1: Validation
-
+  // Add any desired validation here
+  
   // STEP 2: Create the data that the order source's API expects
   const data = {
     operation: "retrieve_sales_order",

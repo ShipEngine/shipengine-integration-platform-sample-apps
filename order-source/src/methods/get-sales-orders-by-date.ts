@@ -1,10 +1,8 @@
 import { Transaction, SalesOrderPOJO, SalesOrderTimeRange, Currency, QuantityUnit } from "@shipengine/integration-platform-sdk";
 import { Session } from "./session";
-import { RetrieveSalesOrderResponse } from "../mock-api/retrieve-sales-order";
 import { apiClient } from "../mock-api/client";
 import { mapSalesOrderStatus, mapPaymentStatus, mapPaymentMethod, mapCountryCode } from "../status-and-mappings";
 import { RetrieveSalesOrdersByDateResponse } from "../mock-api/retrieve-sales-orders-by-date";
-
 
 /**
  * Logs in using the username and password entered on the login form
@@ -13,14 +11,15 @@ export default async function getSalesOrdersByDate(
   transaction: Transaction<Session>,
   range: SalesOrderTimeRange,
 ): Promise<Iterable<SalesOrderPOJO>> {
-
+  // STEP 1: Validation
+  // Add any desired validation here
 
   // STEP 2: Create the data that the order's API expects
   const data = {
     operation: "retrieve_sales_orders_by_date",
     session_id: transaction.session.id,
-    start_date: new Date().toISOString(),
-    end_date: new Date().toISOString()
+    start_date:  range.startDateTime,
+    end_date: range.endDateTime
   };
 
   // STEP 3: Call the order source's API
@@ -29,7 +28,6 @@ export default async function getSalesOrdersByDate(
   // Step 4: Create the output data that ShipEngine expects
   return formatSalesOrders(response.data);
 }
-
 
 function formatSalesOrders(salesOrders: RetrieveSalesOrdersByDateResponse): Iterable<SalesOrderPOJO> {
 

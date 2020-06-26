@@ -3,9 +3,6 @@ import { authenticate, AuthenticateRequest } from "./authenticate";
 import { retrieveSeller, RetrieveSellerRequest } from "./retrieve-seller";
 import { RetrieveSalesOrderRequest, retrieveSalesOrder } from "./retrieve-sales-order";
 import { retrieveSalesOrdersByDate, RetrieveSalesOrdersByDateRequest } from "./retrieve-sales-orders-by-date";
-import { CancelShipmentRequest, cancelShipment } from "./cancel-shipment";
-import { CreateShipmentRequest, createShipment } from "./create-shipment";
-
 
 // Read config values from environment variables
 const API_URL = process.env.API_URL || "https://httpbin.org/anything";
@@ -54,12 +51,6 @@ export const apiClient = axios.create({
 
       case "retrieve_sales_orders_by_date":
         return retrieveSalesOrdersByDate(request as HttpRequest & RetrieveSalesOrdersByDateRequest);
-
-      case "cancel_shipment":
-        return cancelShipment(request as HttpRequest & CancelShipmentRequest);
-
-      case "create_shipment":
-        return createShipment(request as HttpRequest & CreateShipmentRequest);
     }
   }
 });

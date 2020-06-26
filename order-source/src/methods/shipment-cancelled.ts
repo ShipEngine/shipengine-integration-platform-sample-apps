@@ -10,12 +10,15 @@ export default async function shipmentCancelled(
   shipment: SalesOrderShipment,
 ): Promise<void> {
   // STEP 1: Validation
+  // Add any desired validation here
+  
   // STEP 2: Create the data that the order source's API expects
   const data = {
     operation: "cancel_shipment",
     session_id: transaction.session.id,
-    shipment_id: shipment.trackingNumber
+    cancelled_shipment_id: shipment.trackingNumber
   };
+
   // STEP 3: Call the order source's API
   await apiClient.request({ data });
 }
