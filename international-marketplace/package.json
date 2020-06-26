@@ -1,7 +1,7 @@
 {
   "name": "@order-source/order-source",
   "version": "1.0.0",
-  "description": "The International Markets App",
+  "description": "The International Marketplace App",
   "main": "src/index.ts",
   "devDependencies": {
     "@shipengine/integration-platform-sdk": "0.0.23",

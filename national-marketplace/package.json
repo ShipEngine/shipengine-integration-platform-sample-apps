@@ -1,7 +1,7 @@
 {
   "name": "@order-source/order-source",
   "version": "1.0.0",
-  "description": "The National Markets App",
+  "description": "The National Marketplace App",
   "main": "src/index.js",
   "devDependencies": {
     "@shipengine/integration-platform-sdk": "0.0.23",
