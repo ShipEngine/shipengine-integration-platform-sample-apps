@@ -14,7 +14,7 @@ function generateLabel(request) {
     shipment_cost: .97 * weight,
     confirmation_cost: 1.26,
     location_cost: .000012 * zone,
-    image_url: "https://httpbin.org/html",
+    image_url: "https://www.w3.org/WAI/ER/tests/xhtml/testfiles/resources/pdf/dummy.pdf",
   }
 }
 

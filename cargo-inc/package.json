@@ -12,7 +12,8 @@
     "debug": "cross-env NODE_OPTIONS=--inspect-brk shipengine apps:test"
   },
   "dependencies": {
-    "axios": "^0.19.2"
+    "axios": "^0.19.2",
+    "js-yaml": "^3.14.0"
   },
   "bundledDependencies": [
     "axios"

@@ -11,12 +11,22 @@ module.exports = {
   createShipment: "create-shipment.js",
   rateShipment: "rate-shipment.js",
 
+  cancelPickups: "cancel-pickups.js",
+  schedulePickup: "schedule-pickup.js",
+
   connectionForm: "forms/connect.js",
   settingsForm: "forms/settings.js",
 
   deliveryServices: [
     "delivery-services/international-ground.js",
     "delivery-services/standard-ground.js",
+  ],
+
+  pickupServices: [
+    "pickup-services/drop-off.js",
+    "pickup-services/flex-pickup.js",
+    "pickup-services/next-day.js",
+    "pickup-services/same-day.js"
   ],
 
   localization: {

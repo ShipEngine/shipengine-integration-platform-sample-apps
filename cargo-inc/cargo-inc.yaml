@@ -9,6 +9,8 @@ createShipment: src/create-shipment.js
 rateShipment: src/rate-shipment.js
 trackShipment: src/track-shipment.js
 cancelShipments: src/cancel-shipments.js
+schedulePickup: src/schedule-pickup.js
+cancelPickups: src/cancel-pickups.js
 
 connectionForm: forms/connect.json
 settingsForm: forms/settings.json
@@ -17,6 +19,12 @@ deliveryServices:
   - delivery-services/international-standard.yaml
   - delivery-services/international-economy.yaml
   - delivery-services/international-overnight.yaml
+
+pickupServices:
+  - pickup-services/drop-off.yaml
+  - pickup-services/flex-pickup.yaml
+  - pickup-services/next-day.yaml
+  - pickup-services/same-day.yaml
 
 localization:
   en-GB:

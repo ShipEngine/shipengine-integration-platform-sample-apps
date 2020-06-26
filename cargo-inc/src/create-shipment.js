@@ -22,12 +22,15 @@ async function createShipment(transaction, shipment) {
     operation: "generate_label",
     session_id: transaction.session.id,
     service_code: shipment.deliveryService.identifiers.apiCode,
-    confirmation_code: shipment.packages[0].deliveryConfirmation.identifiers.apiCode,
     ship_date: shipment.shipDateTime.toISOString(),
     from_zone: parseInt(shipment.shipFrom.postalCode, 10),
     to_zone: parseInt(shipment.shipTo.postalCode, 10),
     total_weight: shipment.package.weight.ounces,
   };
+
+  if(shipment.packages[0].deliveryConfirmation){
+    data.confirmation_code = shipment.packages[0].deliveryConfirmation.identifiers.apiCode;
+  }
 
   // STEP 3: Call the carrier's API
   const response = await apiClient.request({ data });
@@ -73,7 +76,7 @@ async function formatShipment(response) {
           name: "Label",
           type: "label",
           size: "letter",
-          format: "html",
+          format: "pdf",
           data: await downloadLabel(response.image_url),
         }
       ]
@@ -85,8 +88,10 @@ async function formatShipment(response) {
  * Downloads a label image
  */
 async function downloadLabel(imageUrl) {
-  let response = await axios.get(imageUrl);
-  return Buffer.from(response.data, "utf-8")
+  let response = await axios.get(imageUrl,{
+    responseType: "arraybuffer"
+  });
+  return Buffer.from(response.data,'binary');
 }
 
 module.exports = createShipment;
