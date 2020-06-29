@@ -63,10 +63,10 @@ function formatSalesOrder(salesOrder) {
     }),
     charges: salesOrder.creditCardCharges.map((charges) => {
       return {
-        type: ChargeType.Credit,
+        type: "credit",
         amount: {
           value: charges.value,
-          currency: Currency.UnitedStatesDollar
+          currency: "USD"
         }
       }
     })
