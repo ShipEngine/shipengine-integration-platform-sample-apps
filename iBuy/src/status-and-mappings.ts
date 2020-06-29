@@ -6,7 +6,7 @@ export const paymentMethod = ["cash", "cc", "transfer_from_bank"];
 
 export function mapSalesOrderStatus(status: string): SalesOrderStatus {
   const statusMapping = {
-    "paymented_needed": SalesOrderStatus.AwaitingPayment,
+    "payment_needed": SalesOrderStatus.AwaitingPayment,
     "in_transit": SalesOrderStatus.AwaitingShipment,
     "on_hold": SalesOrderStatus.OnHold,
     "completed": SalesOrderStatus.Completed,
@@ -18,7 +18,7 @@ export function mapSalesOrderStatus(status: string): SalesOrderStatus {
 
 export function mapPaymentStatus(status: string): PaymentStatus {
   const statusMapping = {
-    "paymented_needed": PaymentStatus.AwaitingPayment,
+    "payment_needed": PaymentStatus.AwaitingPayment,
     "processing": PaymentStatus.InProcess,
     "paid": PaymentStatus.Paid,
     "failed_payment": PaymentStatus.Failed,

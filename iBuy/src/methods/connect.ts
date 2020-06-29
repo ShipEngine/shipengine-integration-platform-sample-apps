@@ -18,9 +18,9 @@ export default async function connect(
   transaction: Transaction<Session>, connectionFormData: ConnectionFormData): Promise<void> {
 
   // STEP 1: Validation
-  // if (!connectionFormData.agree_to_eula) {
-  //   throw new Error(`You must agree to the terms and conditions`);
-  // }
+  if (!connectionFormData.agree_to_eula) {
+    throw new Error(`You must agree to the terms and conditions`);
+  }
 
   // STEP 2: Create the data that the carrier's API expects
   let data: AuthenticateRequest = {

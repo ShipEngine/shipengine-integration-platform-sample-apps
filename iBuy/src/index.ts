@@ -4,7 +4,7 @@ const orderSource: OrderAppDefinition = {
   id: "5e386891-f693-4cdf-8b0c-82d7eb7542d0",
   name: "my order source app",
   websiteURL: "https://www.test.com",
-  logo: "./logo.svg",
+  logo: "./../logo.svg",
   connectionForm: import("./forms/connect"),
   settingsForm: import("./forms/settings"),
 

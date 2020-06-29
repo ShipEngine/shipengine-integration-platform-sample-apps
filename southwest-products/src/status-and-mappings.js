@@ -4,7 +4,7 @@ const paymentMethod = ["cash", "cc", "transfer_from_bank"];
 
 function mapSalesOrderStatus(status) {
   const statusMapping = {
-    "paymented_needed": "awaiting_payment",
+    "payment_needed": "awaiting_payment",
     "in_transit": "awaiting_payment",
     "on_hold": "on_hold",
     "completed": "completed",
@@ -16,7 +16,7 @@ function mapSalesOrderStatus(status) {
 
 function mapPaymentStatus(status) {
   const statusMapping = {
-    "paymented_needed": "awaiting_payment",
+    "payment_needed": "awaiting_payment",
     "processing": "in_process",
     "paid": "paid",
     "failed_payment": "failed",
