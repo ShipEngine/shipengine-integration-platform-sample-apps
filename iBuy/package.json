@@ -1,7 +1,7 @@
 {
   "name": "@order-source/order-source",
   "version": "1.0.0",
-  "description": "The International Marketplace App",
+  "description": "The iBuy Order Source App",
   "main": "src/index.ts",
   "devDependencies": {
     "@shipengine/integration-platform-sdk": "0.0.23",
