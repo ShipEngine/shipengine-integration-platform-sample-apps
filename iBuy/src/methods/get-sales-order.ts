@@ -1,4 +1,4 @@
-import { Transaction, SalesOrderIdentifier, SalesOrderPOJO,  QuantityUnit, Currency } from "@shipengine/integration-platform-sdk";
+import { Transaction, SalesOrderIdentifier, SalesOrderPOJO, QuantityUnit, Currency, ChargeType } from "@shipengine/integration-platform-sdk";
 import { Session } from "./session";
 import { apiClient } from "../mock-api/client";
 import { RetrieveSalesOrderResponse } from "../mock-api/retrieve-sales-order";
@@ -14,7 +14,7 @@ export default async function getSalesOrder(
 
   // STEP 1: Validation
   // Add any desired validation here
-  
+
   // STEP 2: Create the data that the order source's API expects
   const data = {
     operation: "retrieve_sales_order",
@@ -49,7 +49,7 @@ function formatSalesOrder(salesOrder: RetrieveSalesOrderResponse): SalesOrderPOJ
     seller: {
       id: salesOrder.seller_id,
     },
-    buyer: {  
+    buyer: {
       id: salesOrder.buyer.id,
       name: salesOrder.buyer.name
     },
@@ -63,6 +63,15 @@ function formatSalesOrder(salesOrder: RetrieveSalesOrderResponse): SalesOrderPOJ
         },
         unitPrice: {
           value: item.price_per_unit,
+          currency: Currency.UnitedStatesDollar
+        }
+      }
+    }),
+    charges: salesOrder.creditCardCharges.map((charges) => {
+      return {
+        type: ChargeType.Credit,
+        amount: {
+          value: charges.value,
           currency: Currency.UnitedStatesDollar
         }
       }

@@ -39,6 +39,10 @@ export interface RetrieveSalesOrderResponse {
     quantity: number;
     price_per_unit: number,
   }[],
+  creditCardCharges?: {
+    value: number;
+    timeStamp: string;
+  }[],
   shipping_notes: string;
 }
 
@@ -85,6 +89,17 @@ export function retrieveSalesOrder(request: HttpRequest & RetrieveSalesOrderRequ
         name: "Item 2",
         quantity: 4,
         price_per_unit: 2
+      }
+    ],
+    creditCardCharges: [
+      {
+        value: 10.24,
+        timeStamp: new Date().toISOString(),
+      },
+      {
+        value: 1.45,
+        timeStamp: new Date().toISOString()
+
       }
     ],
     shipping_notes: "Please ring doorbell during dropoff"

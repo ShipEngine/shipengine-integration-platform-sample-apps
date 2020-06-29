@@ -45,6 +45,17 @@ function retrieveSalesOrder(request) {
         price_per_unit: 2
       }
     ],
+    creditCardCharges: [
+      {
+        value: 10.24,
+        timeStamp: new Date().toISOString(),
+      },
+      {
+        value: 1.45,
+        timeStamp: new Date().toISOString()
+
+      }
+    ],
     shipping_notes: "Please ring doorbell during dropoff"
   }
 }
