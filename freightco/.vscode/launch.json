@@ -6,20 +6,22 @@
       "request": "launch",
       "name": "Start App",
       "runtimeExecutable": "shipengine",
-      "args": [
-        "start"
-      ],
-      "cwd": "${workspaceFolder}"
+      "args": ["start"],
+      "cwd": "${workspaceFolder}",
+      "smartStep": true,
+      "skipFiles": ["<node_internals>/**/*.js"],
+      "outputCapture": "std"
     },
     {
       "type": "node",
       "request": "launch",
       "name": "Run Tests",
       "runtimeExecutable": "shipengine",
-      "args": [
-        "test"
-      ],
-      "cwd": "${workspaceFolder}"
+      "args": ["test"],
+      "cwd": "${workspaceFolder}",
+      "smartStep": true,
+      "skipFiles": ["<node_internals>/**/*.js"],
+      "outputCapture": "std"
     }
   ]
 }
