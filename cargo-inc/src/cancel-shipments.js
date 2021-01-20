@@ -1,53 +1,54 @@
 "use strict";
 
-const apiClient = require("./mock-api/client");
+const apiClient = require('./api/client');
 
+/**
+ * Cancels one or more shipments.
+ */
 async function cancelShipments(transaction, shipmentCancellations) {
   // STEP 1: Validation
 
   // STEP 2: Create the data that the carrier's API expects
-  let data = {
-    operation: "void_labels",
+  const data = {
     session_id: transaction.session.id,
     cancellations: shipmentCancellations.map((cancellation) => {
-      const { cancellationID, trackingNumber } = cancellation;
       return {
-        cancellationID: cancellationID,
-        internalReferenceID: cancellation.identifiers.internalReferenceID,
-        trackingNumber: trackingNumber,
+        id: cancellation.cancellationID,
+        tracking_number: cancellation.trackingNumber,
+        internal_id: cancellation.identifiers.internalReferenceID
       };
     }),
   };
 
   // STEP 3: Call the carrier's API
-  const response = await apiClient.request({ data });
+  const response = await apiClient('carrier').post('/label/cancel', data);
 
   // STEP 4: Create the output data that ShipEngine Connect expects
-  return await formatCancellationResponse(response.data);
+  return formatCancellationResponse(response.data);
 }
 
 /**
- * Formats a shipment in the way ShipEngine Connect expects
+ * Formats shipment cancellations in the way ShipEngine Connect expects.
  */
-async function formatCancellationResponse(response) {
-  return response.canceledShipments.map((cancellation) => {
+function formatCancellationResponse(response) {
+  return response.map((cancellation) => {
     const status = ((status) => {
       switch (status) {
-        case "COMPLETE":
-          return "success";
-        case "FAILED":
-          return "error";
+        case 'COMPLETE':
+          return 'success';
+        case 'FAILED':
+          return 'error';
         default:
-          throw new Error("status unknown");
+          throw new Error('Status unknown.');
       }
-    })(cancellation.cancellationStatus);
+    })(cancellation.status);
 
     return {
       cancellationID: cancellation.id,
       status: status,
-      code: cancellation.cancellationCode,
-      description: cancellation.cancellationDescription,
-      notes: cancellation.cancellationNote ? [{ type: "message_to_buyer", text: cancellation.cancellationNote }] : undefined,
+      code: cancellation.code,
+      description: cancellation.description,
+      notes: cancellation.note ? [{ type: 'message_to_buyer', text: cancellation.note }] : undefined,
       metadata: {},
     };
   });

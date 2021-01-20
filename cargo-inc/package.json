@@ -12,6 +12,7 @@
   },
   "dependencies": {
     "axios": "^0.19.2",
+    "dayjs": "^1.10.3",
     "js-yaml": "^3.14.0"
   }
 }

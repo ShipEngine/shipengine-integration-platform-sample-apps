@@ -46,3 +46,5 @@ parcel-post/lib
 /coverage
 
 .env.test
+
+dist

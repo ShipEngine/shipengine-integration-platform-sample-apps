@@ -1,22 +1,25 @@
-const apiClient = require("./mock-api/client");
-const yaml = require("js-yaml");
-const fs = require("fs");
-const path = require("path");
+'use strict';
 
-const sameDayPath = path.join(__dirname, "..", "pickup-services", "same-day.yaml");
-const sameDayPickup = yaml.safeLoad(fs.readFileSync(sameDayPath, "utf8"));
+const fs = require('fs');
+const path = require('path');
+
+const yaml = require('js-yaml');
+
+const apiClient = require('./api/client');
+
+const sameDayPath = path.join(__dirname, '..', 'pickup-services', 'same-day.yaml');
+const sameDayPickup = yaml.safeLoad(fs.readFileSync(sameDayPath, 'utf8'));
 
 /**
- * Cancels one or more previously-scheduled pickups
+ * Cancels one or more previously-scheduled pickups.
  */
 async function cancelPickups(transaction, pickups) {
 
   let data = {
-    operation: "pick_up_cancellation",
     scheduled_pick_ups: pickups.map((pickup) => {
       // STEP 1: Validation
       if (pickup.pickupService.id === sameDayPickup.id) {
-        throw new Error(`Same-day pickups cannot be canceled`);
+        throw new Error('Same-day pickups cannot be canceled.');
       }
 
       // STEP 2: Create the data that the carrier's API expects
@@ -30,7 +33,7 @@ async function cancelPickups(transaction, pickups) {
   };
 
   // STEP 3: Call the carrier's API
-  let response = await apiClient.request({ data });
+  const response = await apiClient('carrier').post('/pickup/cancel', data);
 
   // STEP 4: Create the output data that ShipEngine Connect expects
   return response.data.canceled_pick_ups.map((cancellation, index) => {
@@ -38,10 +41,10 @@ async function cancelPickups(transaction, pickups) {
       return {
         cancellationID: pickups[index].cancellationID,
         confirmationNumber: cancellation.id,
-        status: "error",
+        status: 'error',
         notes: [
           {
-            type: "message_to_buyer",
+            type: 'message_to_buyer',
             text: cancellation.reason,
           }
         ],
@@ -51,11 +54,11 @@ async function cancelPickups(transaction, pickups) {
       return {
         cancellationID: pickups[index].cancellationID,
         confirmationNumber: cancellation.id,
-        status: "success",
+        status: 'success',
         notes: [
           {
-            type: "message_to_buyer",
-            text: `Pickup ${pickups[index].id} was canceled successfully`
+            type: 'message_to_buyer',
+            text: `Pickup ${pickups[index].id} was canceled successfully.`
           }
         ]
       };

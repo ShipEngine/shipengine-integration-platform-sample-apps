@@ -1,10 +1,11 @@
 "use strict";
 
-const axios = require("axios");
-const apiClient = require("./mock-api/client");
+const axios = require('axios');
+
+const apiClient = require('./api/client');
 
 // The packaging ID for a customer's own packaging
-const OWN_PACKAGING = "03318192-3e6c-475f-a496-a4f17c1dbcae";
+const OWN_PACKAGING = '03318192-3e6c-475f-a496-a4f17c1dbcae';
 
 /**
  * Generates a shipping label and tracking number for a shipment
@@ -19,7 +20,6 @@ async function createShipment(transaction, shipment) {
 
   // STEP 2: Create the data that the carrier's API expects
   let data = {
-    operation: "generate_label",
     session_id: transaction.session.id,
     service_code: shipment.deliveryService.code,
     ship_date: shipment.shipDateTime.toISOString(),
@@ -33,7 +33,7 @@ async function createShipment(transaction, shipment) {
   }
 
   // STEP 3: Call the carrier's API
-  const response = await apiClient.request({ data });
+  const response = await apiClient('carrier').post('/label/create', data);
 
   // STEP 4: Create the output data that ShipEngine Connect expects
   return await formatShipment(response.data);
@@ -47,32 +47,32 @@ async function formatShipment(response) {
     trackingNumber: response.tracking_number,
     deliveryDateTime: response.delivery_date,
     label: {
-      name: "Label",
-      type: "label",
-      size: "letter",
-      format: "pdf",
-      data: await downloadLabel(response.image_url),
+      name: 'Label',
+      type: 'label',
+      size: 'letter',
+      format: 'pdf',
+      data: Buffer.from(response.image, 'base64')
     },
     charges: [
       {
-        type: "shipping",
+        type: 'shipping',
         amount: {
           value: response.shipment_cost,
-          currency: "USD"
+          currency: 'USD'
         }
       },
       {
-        type: "delivery_confirmation",
+        type: 'delivery_confirmation',
         amount: {
           value: response.confirmation_cost,
-          currency: "USD"
+          currency: 'USD'
         }
       },
       {
-        type: "location_fee",
+        type: 'location_fee',
         amount: {
           value: response.location_cost,
-          currency: "USD"
+          currency: 'USD'
         }
       },
     ],
@@ -80,16 +80,6 @@ async function formatShipment(response) {
       trackingNumber: response.tracking_number,
     }],
   };
-}
-
-/**
- * Downloads a label image
- */
-async function downloadLabel(imageUrl) {
-  let response = await axios.get(imageUrl, {
-    responseType: "arraybuffer"
-  });
-  return Buffer.from(response.data, 'binary');
 }
 
 module.exports = createShipment;

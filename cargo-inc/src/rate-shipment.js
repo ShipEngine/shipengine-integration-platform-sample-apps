@@ -1,6 +1,6 @@
 "use strict";
 
-const apiClient = require("./mock-api/client");
+const apiClient = require("./api/client");
 
 /**
  * Generates shipping rates for a shipment
@@ -11,7 +11,6 @@ async function rateShipment(transaction, shipment) {
 
   // STEP 2: Create the data that the carrier's API expects
   let data = {
-    operation: "quote_rates",
     session_id: transaction.session.id,
     ship_date: shipment.shipDateTime.toISOString(),
     from_zone: parseInt(shipment.shipFrom.postalCode, 10),
@@ -26,8 +25,8 @@ async function rateShipment(transaction, shipment) {
   // TODO: re-write the code to handle multiple package codes
   if(shipment.packages.length > 0) {
     data.parcel_codes = shipment.packages
-      .map((packages) => packages.packaging && packages.packaging.code)
-      .filter((packageCodes) => packageCodes !== undefined);
+      .map(packages => packages.packaging && packages.packaging.code)
+      .filter(packageCodes => packageCodes !== undefined);
   }
 
   if(shipment.deliveryConfirmation) {
@@ -39,7 +38,7 @@ async function rateShipment(transaction, shipment) {
   }
 
   // STEP 3: Call the carrier's API
-  const response = await apiClient.request({ data });
+  const response = await apiClient('carrier').post('/shipment/rates', data);
 
   // STEP 4: Create the output data that ShipEngine Connect expects
   return response.data.map(formatRate);
